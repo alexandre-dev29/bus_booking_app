@@ -15,7 +15,6 @@ export enum UsersScalarFieldEnum {
   fullName = 'fullName',
   phoneNumber = 'phoneNumber',
   password = 'password',
-
   refreshToken = 'refreshToken',
   photoUrl = 'photoUrl',
   isPhoneConfirmed = 'isPhoneConfirmed',
@@ -37,7 +36,6 @@ export enum SortOrder {
 
 export enum QueryMode {
   'default' = 'default',
-
   insensitive = 'insensitive',
 }
 

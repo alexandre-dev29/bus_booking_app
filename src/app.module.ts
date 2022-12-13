@@ -8,8 +8,8 @@ import { useResponseCache } from '@graphql-yoga/plugin-response-cache';
 import { useGraphQlJit } from '@envelop/graphql-jit';
 import { createRedisCache } from '@envelop/response-cache-redis';
 import Redis from 'ioredis';
-import { GetInMemoryStore } from '../libs/utility';
 import { UsersModule } from './users/users.module';
+import { GetInMemoryStore } from '@utilities';
 
 const redis = new Redis({});
 

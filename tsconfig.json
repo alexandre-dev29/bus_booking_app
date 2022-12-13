@@ -16,6 +16,13 @@
     "noImplicitAny": false,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
+    "paths": {
+      "@data-access": [
+        "libs/data-access"
+      ],
+      "@utilities": [
+        "libs/utility"
+      ]
+    }
   }
 }
