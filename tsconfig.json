@@ -22,6 +22,9 @@
       ],
       "@utilities": [
         "libs/utility"
+      ],
+      "@app-security": [
+        "libs/app-security"
       ]
     }
   }

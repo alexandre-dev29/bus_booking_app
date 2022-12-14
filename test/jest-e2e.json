@@ -12,6 +12,7 @@
   },
   "moduleNameMapper": {
     "@data-access": "<rootDir>/../libs/data-access",
-    "@utilities": "<rootDir>/../libs/utility"
+    "@utilities": "<rootDir>/../libs/utility",
+    "@app-security": "<rootDir>/../libs/app-security"
   }
 }

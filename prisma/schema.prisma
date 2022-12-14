@@ -17,16 +17,130 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SuperAdmin
+  User
+  Admin
+}
+
+enum PaymentMode {
+  AirtelMoney
+  Mpesa
+  OrangeMoney
+  AfricelMoney
+}
+
 model Users {
-  userId      String  @id @default(cuid())
-  fullName    String  @db.VarChar(60)
-  phoneNumber  String  @db.VarChar(20)
+  userId           String        @id @default(cuid())
+  fullName         String        @db.VarChar(60)
+  phoneNumber      String        @db.VarChar(20)
   /// @HideField()
-  password     String  @db.VarChar(100)
+  password         String        @db.VarChar(100)
+  /// @HideField({ output: true, input: true })
+  refreshToken     String?
+  photoUrl         String        @db.VarChar(100)
+  isPhoneConfirmed Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  role             Role          @default(User)
+  Reservation      Reservation[]
+}
+
+model Admin {
+  adminId      String   @id @default(cuid())
+  fullName     String   @db.VarChar(60)
+  phoneNumber  String   @db.VarChar(20)
+  username     String   @db.VarChar(30)
+  /// @HideField()
+  password     String   @db.VarChar(100)
   /// @HideField({ output: true, input: true })
   refreshToken String?
-  photoUrl         String   @db.VarChar(100)
-  isPhoneConfirmed Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  photoUrl     String   @db.VarChar(100)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  role         Role     @default(Admin)
+}
+
+model BusType {
+  busTypeId     String   @id @default(cuid())
+  typeName      String   @db.VarChar(100)
+  capacity      Int
+  numberRow     Int
+  columnRow     Int
+  lastRowPlaces Int
+  withToilet    Boolean  @default(false)
+  Bus           Bus[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Bus {
+  busId     String   @id @default(cuid())
+  busName   String   @db.VarChar(100)
+  busTypeId String?  @unique
+  busType   BusType? @relation(fields: [busTypeId], references: [busTypeId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Town {
+  townId    String          @id @default(cuid())
+  townName  String          @db.VarChar(100)
+  provice   String          @db.VarChar(100)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  departs   TransportLine[] @relation("departTown")
+  arrivals  TransportLine[] @relation("arrivalkTown")
+}
+
+model TransportLine {
+  transportLineId String     @id @default(cuid())
+  townDepart      String     @unique
+  townArrival     String     @unique
+  departTown      Town       @relation(name: "departTown", fields: [townDepart], references: [townId])
+  arrivalTown     Town       @relation(name: "arrivalkTown", fields: [townArrival], references: [townId])
+  distance        Int
+  price           Int
+  Schedule        Schedule[]
+}
+
+model Reservation {
+  reservationId     String   @id @default(cuid())
+  userId            String   @unique
+  user              Users    @relation(fields: [userId], references: [userId])
+  scheduleId        String   @unique
+  schedule          Schedule @relation(fields: [scheduleId], references: [scheduleId])
+  dateOfReservation DateTime @db.Date
+  rowNumber         Int
+  columnNumber      Int
+  placeNumber       Int
+  totalPrice        Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  Payment           Payment?
+}
+
+model Schedule {
+  scheduleId      String        @id @default(cuid())
+  transportLineId String        @unique
+  transportLine   TransportLine @relation(fields: [transportLineId], references: [transportLineId])
+  hourDepart      DateTime
+  hourArrival     DateTime
+  hourEmbarquing  DateTime
+  isPaid          Boolean
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  Reservation     Reservation[]
+}
+
+model Payment {
+  paymentId     String      @id @default(cuid())
+  reservationId String      @unique
+  reservation   Reservation @relation(fields: [reservationId], references: [reservationId])
+  datePayment   DateTime
+  amount        DateTime
+  isPaid        Boolean
+  paymentMode   PaymentMode
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }

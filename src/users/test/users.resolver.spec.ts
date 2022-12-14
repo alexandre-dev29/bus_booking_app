@@ -4,7 +4,7 @@ import { UsersService } from '../users.service';
 import { jest } from '@jest/globals';
 import { usersStub } from './stubs/users.stub';
 import { UsersServiceMock } from '../__mock__/users.service';
-import { PrismaService, Users } from '@bus-booking/data-access';
+import { PrismaService, Users } from '@data-access';
 
 describe('UserResolver', () => {
   let usersResolver: UsersResolver;

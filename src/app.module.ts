@@ -10,6 +10,9 @@ import { createRedisCache } from '@envelop/response-cache-redis';
 import Redis from 'ioredis';
 import { UsersModule } from './users/users.module';
 import { GetInMemoryStore } from '@utilities';
+import { CaslModule } from 'nest-casl';
+import { Role } from '@data-access';
+import { UserSecurity } from '@app-security';
 
 const redis = new Redis({});
 
@@ -33,6 +36,10 @@ const redis = new Redis({});
         useGraphQlJit(),
         useLiveQuery({ liveQueryStore: GetInMemoryStore() }),
       ],
+    }),
+    CaslModule.forRoot<Role, UserSecurity>({
+      superuserRole: Role.SuperAdmin,
+      getUserFromRequest: (request) => request.user,
     }),
     UsersModule,
   ],

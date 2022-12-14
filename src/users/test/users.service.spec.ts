@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users.service';
-import { DataAccessPrismaService } from '@food-delivery-mono/data-access';
+import { PrismaService } from '@data-access';
 import { UsersServiceMock } from '../__mock__/users.service';
 
 describe('UsersService', () => {
@@ -10,7 +10,7 @@ describe('UsersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         { provide: UsersService, useValue: UsersServiceMock },
-        DataAccessPrismaService,
+        PrismaService,
       ],
     }).compile();
 

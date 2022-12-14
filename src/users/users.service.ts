@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
   PrismaService,
-  StringFieldUpdateOperationsInput,
+  UpdateOneUsersArgs,
+  Users,
   UsersCreateInput,
 } from '@data-access';
 
@@ -9,26 +10,23 @@ import {
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  create(createUserInput: UsersCreateInput) {
-    return 'This action adds a new user';
+  create(createUserInput: UsersCreateInput): Promise<Users> {
+    return this.prismaService.users.create({ data: createUserInput });
   }
 
   findAll() {
     return this.prismaService.users.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    return this.prismaService.users.findUnique({ where: { userId: id } });
   }
 
-  update(
-    id: InstanceType<typeof StringFieldUpdateOperationsInput> | undefined,
-    updateUserInput,
-  ) {
-    return `This action updates a #${id} user`;
+  update(updateUserArgs: UpdateOneUsersArgs) {
+    return this.prismaService.users.update(updateUserArgs);
   }
 
   remove(id: string) {
-    return `This action removes a #${id} user`;
+    return this.prismaService.users.delete({ where: { userId: id } });
   }
 }
