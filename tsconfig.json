@@ -25,6 +25,9 @@
       ],
       "@app-security": [
         "libs/app-security"
+      ],
+      "@shared-types": [
+        "libs/shared-types"
       ]
     }
   }

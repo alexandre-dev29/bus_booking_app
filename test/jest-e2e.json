@@ -13,6 +13,7 @@
   "moduleNameMapper": {
     "@data-access": "<rootDir>/../libs/data-access",
     "@utilities": "<rootDir>/../libs/utility",
-    "@app-security": "<rootDir>/../libs/app-security"
+    "@app-security": "<rootDir>/../libs/app-security",
+    "@shared-types": "<rootDir>/../libs/shared-types"
   }
 }
