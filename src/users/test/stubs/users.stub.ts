@@ -1,4 +1,4 @@
-import { Users } from '@data-access';
+import { Role, Users } from '@data-access';
 
 export const usersStub = (): Users => {
   return {
@@ -9,6 +9,7 @@ export const usersStub = (): Users => {
     phoneNumber: '',
     photoUrl: '',
     refreshToken: '',
+    role: Role.User,
     createdAt: new Date(2022, 9, 30),
     updatedAt: new Date(2022, 9, 30),
   };
