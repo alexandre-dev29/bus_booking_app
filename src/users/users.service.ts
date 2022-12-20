@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  FindManyUsersArgs,
   PrismaService,
   UpdateOneUsersArgs,
   Users,
@@ -14,8 +15,8 @@ export class UsersService {
     return this.prismaService.users.create({ data: createUserInput });
   }
 
-  findAll() {
-    return this.prismaService.users.findMany({});
+  findAll(findManyUsers: FindManyUsersArgs) {
+    return this.prismaService.users.findMany(findManyUsers);
   }
 
   findOne(id: string) {

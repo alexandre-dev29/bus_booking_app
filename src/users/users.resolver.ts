@@ -1,6 +1,11 @@
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from './users.service';
-import { UpdateOneUsersArgs, Users, UsersCreateInput } from '@data-access';
+import {
+  FindManyUsersArgs,
+  UpdateOneUsersArgs,
+  Users,
+  UsersCreateInput,
+} from '@data-access';
 import { AuthService } from './auth.service';
 import { LoginResponse } from '@shared-types';
 
@@ -17,8 +22,11 @@ export class UsersResolver {
   }
 
   @Query(() => [Users], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(
+    @Args('findManyUsersArgs', { type: () => FindManyUsersArgs })
+    findManyUsersArgs: FindManyUsersArgs,
+  ) {
+    return this.usersService.findAll(findManyUsersArgs);
   }
 
   @Query(() => Users, { name: 'user' })

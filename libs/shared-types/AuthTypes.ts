@@ -1,7 +1,7 @@
 import { Scalar } from '@nestjs/graphql';
 import { FastifyCookieOptions } from '@fastify/cookie';
 import * as process from 'process';
-import { Users } from '@data-access';
+import { Admin, Users } from '@data-access';
 
 export type Tokens = {
   access_token: string;
@@ -25,4 +25,11 @@ export class LoginResponse {
   access_token?: string;
   refresh_token: string;
   user: Partial<Users>;
+}
+
+@Scalar('LoginResponse')
+export class LoginResponseAdmin {
+  access_token?: string;
+  refresh_token: string;
+  admin: Partial<Admin>;
 }

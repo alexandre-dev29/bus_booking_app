@@ -3,7 +3,7 @@ import { PrismaService, Role, Users } from '@data-access';
 import { JwtService } from '@nestjs/jwt';
 import { GraphQLError } from 'graphql/error';
 import * as bcrypt from 'bcrypt';
-import { cookieOption, LoginResponse } from '@shared-types';
+import { LoginResponse } from '@shared-types';
 import { UtilityService } from '../utilities/utility.service';
 
 @Injectable()
@@ -86,26 +86,14 @@ export class AuthService {
         },
       });
 
-      if (user.role == Role.SuperAdmin || user.role == Role.Admin) {
-        const tokenString = `token=${access_token};HttpOnly;Path=/;Max-Age=${86400};samesite=Strict;`;
-        context.cookie(tokenString, cookieOption);
-        return {
-          refresh_token,
-          user: {
-            userId: user.userId,
-            phoneNumber: user.phoneNumber,
-          },
-        } as LoginResponse;
-      } else {
-        return {
-          access_token,
-          refresh_token,
-          user: {
-            userId: user.userId,
-            phoneNumber: user.phoneNumber,
-          },
-        } as LoginResponse;
-      }
+      return {
+        access_token,
+        refresh_token,
+        user: {
+          userId: user.userId,
+          phoneNumber: user.phoneNumber,
+        },
+      } as LoginResponse;
     } else {
       return new GraphQLError(
         'The phone number or password is invalid please try again',
