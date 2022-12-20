@@ -8,6 +8,9 @@ import {
 } from '@data-access';
 import { AuthService } from './auth.service';
 import { LoginResponse } from '@shared-types';
+import { UseGuards } from '@nestjs/common';
+import { MainAuthGuardGuard, SecurityActions } from '@app-security';
+import { AccessGuard, UseAbility } from 'nest-casl';
 
 @Resolver(() => Users)
 export class UsersResolver {
@@ -22,6 +25,8 @@ export class UsersResolver {
   }
 
   @Query(() => [Users], { name: 'users' })
+  @UseGuards(MainAuthGuardGuard, AccessGuard)
+  @UseAbility(SecurityActions.readAll, Users)
   findAll(
     @Args('findManyUsersArgs', { type: () => FindManyUsersArgs })
     findManyUsersArgs: FindManyUsersArgs,
@@ -30,16 +35,22 @@ export class UsersResolver {
   }
 
   @Query(() => Users, { name: 'user' })
+  @UseGuards(MainAuthGuardGuard, AccessGuard)
+  @UseAbility(SecurityActions.readOne, Users)
   findOne(@Args('userId', { type: () => String }) id: string) {
     return this.usersService.findOne(id);
   }
 
   @Mutation(() => Users)
+  @UseGuards(MainAuthGuardGuard, AccessGuard)
+  @UseAbility(SecurityActions.update, Users)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateOneUsersArgs) {
     return this.usersService.update(updateUserInput);
   }
 
   @Mutation(() => Users)
+  @UseGuards(MainAuthGuardGuard, AccessGuard)
+  @UseAbility(SecurityActions.manage, Users)
   removeUser(@Args('userId', { type: () => String }) userId: string) {
     return this.usersService.remove(userId);
   }

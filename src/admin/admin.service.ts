@@ -17,8 +17,23 @@ export class AdminService {
     private utilityService: UtilityService,
   ) {}
 
-  create(createAdminInput: AdminCreateInput) {
-    return this.prismaService.admin.create({ data: createAdminInput });
+  async create(createAdminInput: AdminCreateInput) {
+    const currentAdmin = await this.prismaService.admin.findFirst({
+      where: {
+        username: createAdminInput.username,
+        OR: { phoneNumber: createAdminInput.phoneNumber },
+      },
+    });
+    if (currentAdmin !== null) {
+      return new GraphQLError('This admin already exist in the system');
+    }
+    const encryptedPassword = await bcrypt
+      .hash(createAdminInput.password, 10)
+      .then((value) => value);
+
+    return this.prismaService.admin.create({
+      data: { ...createAdminInput, password: encryptedPassword },
+    });
   }
 
   findAll(findAdminArgs: FindManyAdminArgs) {
