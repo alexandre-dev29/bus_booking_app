@@ -9,10 +9,12 @@ import { useGraphQlJit } from '@envelop/graphql-jit';
 import { createRedisCache } from '@envelop/response-cache-redis';
 import Redis from 'ioredis';
 import { UsersModule } from './users/users.module';
-import { GetInMemoryStore } from '@utilities';
 import { CaslModule } from 'nest-casl';
 import { Role } from '@data-access';
 import { UserSecurity } from '@app-security';
+import { UtilitiesModule } from './utilities/utilities.module';
+import { GetInMemoryStore } from './utilities/memoryStore';
+import { AdminModule } from './admin/admin.module';
 
 const redis = new Redis({});
 
@@ -42,6 +44,8 @@ const redis = new Redis({});
       getUserFromRequest: (request) => request.user,
     }),
     UsersModule,
+    UtilitiesModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

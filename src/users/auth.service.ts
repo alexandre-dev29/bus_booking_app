@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService, Role, Users } from '@data-access';
 import { JwtService } from '@nestjs/jwt';
-import { TwilioOperationService, UtilityService } from '@utilities';
 import { GraphQLError } from 'graphql/error';
 import * as bcrypt from 'bcrypt';
 import { cookieOption, LoginResponse } from '@shared-types';
+import { UtilityService } from '../utilities/utility.service';
 
 @Injectable()
-export class UsersService {
+export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-    private twilioService: TwilioOperationService,
     private utilityService: UtilityService,
   ) {}
 
@@ -33,7 +32,7 @@ export class UsersService {
       .then((value) => value);
 
     try {
-      const responseTwilio = await this.twilioService.SendOtpVerificationCode(
+      const responseTwilio = await this.utilityService.SendOtpVerificationCode(
         `${phoneNumber}`,
       );
 
@@ -122,7 +121,7 @@ export class UsersService {
       where: { phoneNumber: phoneNumber },
     });
     if (foundedUser) {
-      const confirmation = await this.twilioService.checkTheVerificationCode(
+      const confirmation = await this.utilityService.checkTheVerificationCode(
         phoneNumber,
         otpCode,
       );
@@ -147,7 +146,7 @@ export class UsersService {
     });
 
     if (foundedUser) {
-      const responseTwilio = await this.twilioService.SendOtpVerificationCode(
+      const responseTwilio = await this.utilityService.SendOtpVerificationCode(
         phoneNumber,
       );
       if (responseTwilio.status == 'pending') {
@@ -168,7 +167,7 @@ export class UsersService {
     });
 
     if (foundedUser) {
-      const confirmation = await this.twilioService.checkTheVerificationCode(
+      const confirmation = await this.utilityService.checkTheVerificationCode(
         phoneNumber,
         otpCode,
       );
